@@ -1,0 +1,17 @@
+# Dependency directories
+/dist
+
+# Logs
+logs
+*.log
+.history
+coverage
+.cache
+tree.txt
+
+# IDE
+.vscode
+.idea
+
+# mac system file
+.DS_Store

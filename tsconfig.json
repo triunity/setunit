@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "ES3",
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "removeComments": true,
+    "strict": true,
+    "strictNullChecks": true,
+    "alwaysStrict": true,
+    "typeRoots": ["./src/typings.d.ts"],
+    "outFile": "./dist/setunit.js",
+  },
+  "files": [
+    "./src/typings.d.ts",
+    "./src/setunit.ts"
+  ]
+}
