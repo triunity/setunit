@@ -1,36 +1,41 @@
-(function setUnit(win: Window, doc: Document): void {
-    const docTmp: Document = doc;
-    const docEl: HTMLElement = doc.documentElement;
-    const { CSS } = win;
-    let unableViewUnit: boolean;
-  
-    function setHtmlFontSize(): void {
-      docEl.style.fontSize = `${docEl.clientWidth / 10}px`;
-    }
-  
-    if (CSS && CSS.supports && CSS.supports("font-size", "10vw")) {
-      docEl.style.fontSize = "10vw";
-      unableViewUnit = false;
-    } else {
-      setHtmlFontSize();
-      unableViewUnit = true;
-    }
-  
-    if (unableViewUnit) {
-      win.addEventListener("resize", setHtmlFontSize);
-      win.addEventListener("pageshow", (e: PageTransitionEvent) => {
-        if (e.persisted) {
-          setHtmlFontSize();
-        }
-      });
-    }
-  
-    (function setBodyFontSize(): void {
-      if (docTmp.body) {
-        docTmp.body.style.fontSize = "12px";
-      } else {
-        docTmp.addEventListener("DOMContentLoaded", setBodyFontSize);
+const initSetUnit: (win: Window, doc: Document) => void = function(win, doc) {
+  const winTmp = win;
+  const docTmp = doc;
+  const docEl = doc.documentElement;
+  const { CSS } = win;
+  let unitUsable = false;
+
+  const setHtmlFontSize = function(val: string) {
+    docEl.style.fontSize = val;
+  }
+
+  if (CSS && CSS.supports && CSS.supports("font-size", "10vw")) {
+    setHtmlFontSize("10vw");
+    unitUsable = true;
+  } else {
+    setHtmlFontSize(`${docEl.clientWidth / 10}px`);
+    unitUsable = false;
+  }
+
+  if (!unitUsable) {
+    winTmp.addEventListener("resize", () => {
+      setHtmlFontSize(`${docEl.clientWidth / 10}px`);
+    });
+    winTmp.addEventListener("pageshow", (evt: PageTransitionEvent) => {
+      if (evt.persisted) {
+        setHtmlFontSize(`${docEl.clientWidth / 10}px`);
       }
-    })();
-  })(window, document);
-  
+    });
+  }
+
+  const setBodyFontSize = function() {
+    if (docTmp.body) {
+      docTmp.body.style.fontSize = "12px";
+    } else {
+      docTmp.addEventListener("DOMContentLoaded", setBodyFontSize);
+    }
+  }
+  setBodyFontSize();
+};
+
+initSetUnit(window, document);
